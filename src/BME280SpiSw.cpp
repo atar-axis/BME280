@@ -147,6 +147,6 @@ bool BME280SpiSw::WriteRegister
    // de-select the device
    digitalWrite(m_settings.spiCsPin, HIGH);
 
-return true;
+   return true;
 }
 

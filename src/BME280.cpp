@@ -76,12 +76,15 @@ bool BME280::InitializeFilter()
   Filter filter = m_settings.filter;
   m_settings.filter = Filter_Off;
 
-  WriteSettings();
+  if(!WriteSettings())
+   return false;
 
   float dummy;
   read(dummy, dummy, dummy);
 
   m_settings.filter = filter;
+
+  return true;
 }
 
 
@@ -116,9 +119,14 @@ bool BME280::WriteSettings()
 
    CalculateRegisters(ctrlHum, ctrlMeas, config);
 
-   WriteRegister(CTRL_HUM_ADDR, ctrlHum);
-   WriteRegister(CTRL_MEAS_ADDR, ctrlMeas);
-   WriteRegister(CONFIG_ADDR, config);
+   if(!WriteRegister(CTRL_HUM_ADDR, ctrlHum))
+      return false;
+   if(!WriteRegister(CTRL_MEAS_ADDR, ctrlMeas))
+      return false;
+   if(!WriteRegister(CONFIG_ADDR, config))
+      return false;
+
+   return true;
 }
 
 
